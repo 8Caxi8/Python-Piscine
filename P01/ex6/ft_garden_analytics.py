@@ -1,58 +1,54 @@
 class Plant:
-    def __init__(self, name: str, height: int, age: int) -> None:
-        self._name = name
-        self.height = height
-        self.age = age
-
-    @property
-    def age(self) -> int:
-        return self._age
-
-    @age.setter
-    def age(self, new_age: int) -> None:
-        try:
-            new_age = int(new_age)
-        except (TypeError, ValueError):
-            print(f"Security: Invalid age {new_age} [REJECTED]")
-            return
-        if new_age < 0:
-            print(f"Security: Negative age {new_age} [REJECTED]")
-        else:
-            self._age = new_age
-
-    @property
-    def height(self) -> int:
-        return self._height
-
-    @height.setter
-    def height(self, new_height: int) -> None:
-        try:
-            new_height = int(new_height)
-        except (TypeError, ValueError):
-            print(f"Security: Invalid height {new_height} [REJECTED]")
-            return
-        if new_height < 0:
-            print(f"Security: Negative height {new_height} [REJECTED]")
-        else:
-            self._height = new_height
+    def __init__(self, name: str, height: int) -> None:
+        self.name = name
+        self._height = height
 
     def __str__(self) -> str:
-        return f"{self._name} ({type(self).__name__}): " \
-                f"{self._height}cm, {self._age} days"
+        return f"- {self.name}: {self._height}cm"
 
 
 class FloweringPlant(Plant):
-    def __init__(self, name: str, height: int, age: int, color: str) -> None:
-        super().__init__(name, height, age)
+    def __init__(self, name: str, height: int, color: str) -> None:
+        super().__init__(name, height)
         self._color = color
 
-    def bloom(self) -> None:
-        print(f"{self._name} is blooming beautifully!")
+    def __str__(self) -> str:
+        return f"{super().__str__()}, {self._color} flowers (blooming)"
+
+
+class PrizeFlower(FloweringPlant):
+    def __init__(self, name: str, height: int, color: str, prize: int) -> None:
+        super().__init__(name, height, color)
+        self._prize = prize
 
     def __str__(self) -> str:
-        return f"{super().__str__()}, {self._color} color"
+        return f"{super().__str__()}, Prize points: {self._prize}"
 
-class PrizeFlower
+
+class Garden:
+    def __init__(self, garden_name: str) -> None:
+        self._garden_name = garden_name
+        self._plants: list[Plant] = []
+        self._score = 0
+
+    def add_plant(self, plant: Plant) -> None:
+        self._plants.append(plant)
+        print(f"Added {plant.name} to {self._garden_name}'s garden")
+
+    def add_score(self, score: int) -> None:
+        self._score += score
+
+
+class GardenManager:
+    def __init__(self, garden: Garden) -> None:
+        self._garden = garden
+
+    def create_garden_network(self, garden: Garden) -> None:
+        pass
+
+
+class GardenStats(GardenManager):
+
 
 
 def create_plants(data_list: list[list[int | str]]) -> list[Plant]:

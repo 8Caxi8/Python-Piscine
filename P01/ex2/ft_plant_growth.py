@@ -28,7 +28,7 @@ while i <= 7:
         plant.get_info()
     if i < 7:
         for plant in plants:
-            plant.age()
+            plant.aged()
         rose.grow(3)
         cactus.grow(-2)
         sunflower.grow()
