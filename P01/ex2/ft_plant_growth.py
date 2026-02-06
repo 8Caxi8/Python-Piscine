@@ -16,25 +16,29 @@ class Plant:
         self.age += age
 
 
-rose: Plant = Plant("Rose", 25, 30)
-sunflower: Plant = Plant("Sunflower", 80, 45)
-cactus: Plant = Plant("Cactus", 15, 120)
-plants: list[Plant] = [rose, sunflower, cactus]
+def main() -> None:
+    rose: Plant = Plant("Rose", 25, 30)
+    sunflower: Plant = Plant("Sunflower", 80, 45)
+    cactus: Plant = Plant("Cactus", 15, 120)
+    plants: list[Plant] = [rose, sunflower, cactus]
 
-i: int = 1
-while i <= 7:
-    print(f" === Day {i} ===")
-    for plant in plants:
-        plant.get_info()
-    if i < 7:
+    for i in range(1, 8):
+        print(f" === Day {i} ===")
         for plant in plants:
-            plant.aged()
-        rose.grow(3)
-        cactus.grow(-2)
-        sunflower.grow()
-    i += 1
+            plant.get_info()
 
-print("Growth this week:")
-print(f"{rose.name}: {rose.growth:+}cm")
-print(f"{sunflower.name}: {sunflower.growth:+}cm")
-print(f"{cactus.name}: {cactus.growth:+}cm")
+        if i < 7:
+            for plant in plants:
+                plant.aged()
+            rose.grow(3)
+            cactus.grow(-2)
+            sunflower.grow()
+
+    print("Growth this week:")
+    print(f"{rose.name}: {rose.growth:+}cm")
+    print(f"{sunflower.name}: {sunflower.growth:+}cm")
+    print(f"{cactus.name}: {cactus.growth:+}cm")
+
+
+if __name__ == "__main__":
+    main()

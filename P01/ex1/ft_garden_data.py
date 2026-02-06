@@ -8,11 +8,16 @@ class Plant:
         print(f"{self.name}: {self.height}cm, {self.age} days old")
 
 
-rose: Plant = Plant("Rose", 25, 30)
-sunflower: Plant = Plant("Sunflower", 80, 45)
-cactus: Plant = Plant("Cactus", 15, 120)
+def main() -> None:
+    rose: Plant = Plant("Rose", 25, 30)
+    sunflower: Plant = Plant("Sunflower", 80, 45)
+    cactus: Plant = Plant("Cactus", 15, 120)
 
-print("=== Garden Plant Registry ===")
-rose.print_info()
-sunflower.print_info()
-cactus.print_info()
+    print("=== Garden Plant Registry ===")
+    rose.print_info()
+    sunflower.print_info()
+    cactus.print_info()
+
+
+if __name__ == "__main__":
+    main()

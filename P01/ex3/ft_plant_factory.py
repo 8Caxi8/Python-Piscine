@@ -9,17 +9,11 @@ class Plant:
     def get_info(self) -> None:
         print(f"{self.name}: {self.height}cm, {self.age} days old")
 
-    def grow(self, growth: int = 1) -> None:
-        self.height += growth
-        self.growth += growth
 
-    def aged(self, age: int = 1) -> None:
-        self.age += age
-
-
-def create_plants(data_list: list[list[int | str]]) -> list[Plant]:
+def create_plants(data_list: list[list[int | str]]) -> None:
     plants: list[Plant] = []
     no: int = 0
+
     for data in data_list:
         plants.append(Plant(*data))
         no += 1
@@ -27,11 +21,17 @@ def create_plants(data_list: list[list[int | str]]) -> list[Plant]:
         print(f"\nTotal plants created: {no}")
 
 
-plant_data: list[list[int | str]] = [
-    ["Rose", 25, 30],
-    ["Oak", 200, 365],
-    ["Cactus", 5, 90],
-    ["Sunflower", 80, 45],
-    ["Fern", 15, 120]]
-print("=== Plant Factory Output ===")
-plants: list[Plant] = create_plants(plant_data)
+def main() -> None:
+    plant_data: list[list[int | str]] = [
+        ["Rose", 25, 30],
+        ["Oak", 200, 365],
+        ["Cactus", 5, 90],
+        ["Sunflower", 80, 45],
+        ["Fern", 15, 120]]
+
+    print("=== Plant Factory Output ===")
+    create_plants(plant_data)
+
+
+if __name__ == "__main__":
+    main()

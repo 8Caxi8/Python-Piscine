@@ -5,7 +5,7 @@ class Plant:
         self._age = age
 
     def __str__(self) -> str:
-        return f"{self._name} ({type(self).__name__}): " \
+        return f"{self._name} ({self.__class__.__name__}): " \
                 f"{self._height}cm, {self._age} days"
 
 
@@ -28,7 +28,8 @@ class Tree(Plant):
         self._trunk_diameter = trunk_diameter
 
     def produce_shade(self) -> None:
-        print(f"{self._name} provides 78 square meters of shade")
+        shade: float = self._trunk_diameter * self._height
+        print(f"{self._name} provides {shade:.0f} square meters of shade")
 
     def __str__(self) -> str:
         return f"{super().__str__()}, {self._trunk_diameter}cm diameter"
@@ -42,28 +43,36 @@ class Vegetable(Plant):
         self._harvest_season = harvest_season
 
     def __str__(self) -> str:
-        return f"{super().__str__()}, {self._harvest_season} harvest\n" \
-            f"{self._name} is rich in {self._nutritional_value}"
+        return f"{super().__str__()}, {self._harvest_season} harvest"
+
+    def get_nutricional(self) -> str:
+        return f"{self._name} is rich in {self._nutritional_value}"
 
 
-print("=== Garden Plant Types ===\n")
+def main() -> None:
+    print("=== Garden Plant Types ===\n")
 
-rose = Flower("Rose", 25, 30, "red")
-violet = Flower("Violet", 25, 30, "violet")
+    rose = Flower("Rose", 25, 30, "red")
+    violet = Flower("Violet", 25, 30, "violet")
+    print(rose)
+    print(violet)
+    violet.bloom()
+    print()
 
-oak = Tree("Oak", 500, 1825, 50)
-maple = Tree("Maple", 450, 1041, 35)
+    oak = Tree("Oak", 500, 1825, 50)
+    maple = Tree("Maple", 450, 1041, 35)
+    print(oak)
+    print(maple)
+    maple.produce_shade()
+    print()
 
-tomato = Vegetable("Tomato", 80, 90, "vitamin C", "summer")
-lettuce = Vegetable("Lettuce", 20, 100, "vitamin K", "spring")
+    tomato = Vegetable("Tomato", 80, 90, "vitamin C", "summer")
+    lettuce = Vegetable("Lettuce", 20, 100, "vitamin K", "spring")
+    print(tomato)
+    print(tomato.get_nutricional())
+    print(lettuce)
+    print(lettuce.get_nutricional())
 
-print(rose)
-print(violet)
-violet.bloom()
-print()
-print(oak)
-print(maple)
-maple.produce_shade()
-print()
-print(tomato)
-print(lettuce)
+
+if __name__ == "__main__":
+    main()
