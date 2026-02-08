@@ -1,51 +1,61 @@
-def file_not_found() -> None:
-    file_name: str = "lost_archive.txt"
+SYSTEM = "system"
+SECURITY = "security"
+CORRUPTED = "corrupted"
+STANDARD = "standard"
 
-    print(f"CRISIS ALERT: Attempting access to '{file_name}'...")
+
+def access_file(file_name: str) -> str:
+
     try:
-        open(file_name, "r")
+        with open(file_name, "r") as file:
+            print(f"ROUTINE ACCESS: Attempting access to '{file_name}'...")
+            data = file.read().strip()
+
     except FileNotFoundError:
+        crisis_alert(file_name)
         print("RESPONSE: Archive not found in storage matrix")
+        return SYSTEM
 
-    print("STATUS: Crisis handled, system stable\n")
-
-
-def restricted_access() -> None:
-    file_name: str = "classified_data.txt"
-
-    print(f"CRISIS ALERT: Attempting access to '{file_name}'...")
-    try:
-        open(file_name, "w")
     except PermissionError:
+        crisis_alert(file_name)
         print("RESPONSE: Security protocols deny access")
+        return SECURITY
 
-    print("STATUS: Crisis handled, security maintained\n")
-
-
-def standard_archive() -> None:
-    file_name: str = "standard_archive.txt"
-
-    print(f"ROUTINE ACCESS: Attempting access to '{file_name}'...")
-    try:
-        file = open(file_name, "r")
-        print(f"SUCCESS: Archive recovered - {file.read()}")
     except OSError:
-        print(f"CRISIS ALERT: Attempting access to '{file_name}'...")
-        print("RESPONSE: Security breached")
+        crisis_alert(file_name)
+        print("RESPONSE: Security measures in place")
+        return CORRUPTED
 
-    print("STATUS: Normal operations resumed\n")
+    print(f"SUCCESS: Archive recovered - \"{data}\"")
+    return STANDARD
+
+
+def crisis_alert(file_name: str) -> None:
+    print(f"CRISIS ALERT: Attempting access to '{file_name}'...")
+
+
+def crisis_handler(file_name: str) -> None:
+    status = access_file(file_name)
+    match status:
+        case "system":
+            print("STATUS: Crisis handled, system stable\n")
+        case "security":
+            print("STATUS: Crisis handled, security maintained\n")
+        case "corrupted":
+            print("STATUS: Crisis handled, corruption denied\n")
+        case "standard":
+            print("STATUS: Normal operations resumed\n")
 
 
 def main() -> None:
-    print("=== CYBER ARCHIVES - CRISIS RESPONSE SYSTEM ===\n")
+    print("=== CYBER ARCHIVES - CRISIS RESPONSE SYSTEM ===")
+    print()
 
-    file_not_found()
+    crisis_handler("lost_archive.txt")
+    crisis_handler("classified_vault.txt")
+    crisis_handler("standard_archive.txt")
 
-    restricted_access()
-
-    standard_archive()
-
-    print("All crisis scenarios handled successfully. Archives secure.\n")
+    print("All crisis scenarios handled successfully. Archives secure.")
 
 
 if __name__ == "__main__":

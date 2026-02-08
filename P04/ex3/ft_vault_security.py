@@ -1,26 +1,26 @@
 def preservation() -> None:
-    file_name: str = "security_protocols.txt"
-    protocols: str = "[CLASSIFIED] New security protocols archived"
+    FILE_NAME: str = "security_protocols.txt"
+    PROTOCOLS: str = "[CLASSIFIED] New security protocols archived"
 
     try:
-        with open(file_name, "w") as file:
+        with open(FILE_NAME, "w") as file:
             print("SECURE PRESERVATION:")
-            file.write(protocols)
-            print(protocols)
+            file.write(PROTOCOLS)
+            print(PROTOCOLS)
 
     except OSError as e:
         print(f"Storage vault error: {e}.\n")
 
-    print("Vault automatically sealed upon completion\n")
+    finally:
+        print("Vault automatically sealed upon completion\n")
 
 
 def extraction() -> None:
-    file_name: str = "classified_data.txt"
+    FILE_NAME: str = "classified_data.txt"
 
+    print("Vault connection established with failsafe protocols\n")
     try:
-        with open(file_name) as file:
-            print("Vault connection established with failsafe protocols\n")
-
+        with open(FILE_NAME) as file:
             print("SECURE EXTRACTION:")
             print(file.read())
             print()
@@ -29,13 +29,14 @@ def extraction() -> None:
 
 
 def main() -> None:
-    print("CYBER ARCHIVES - VAULT SECURITY SYSTEM ===\n")
+    print("=== CYBER ARCHIVES - VAULT SECURITY SYSTEM ===")
+    print()
 
     print("Initiating secure vault access...")
     extraction()
     preservation()
 
-    print("All vault operations completed with maximim security.\n")
+    print("All vault operations completed with maximum security.")
 
 
 if __name__ == "__main__":

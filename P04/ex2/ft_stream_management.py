@@ -1,26 +1,26 @@
 import sys
 
 
-def std_in() -> list[str]:
-    arch_id: str
-    status_report: str
+class VaultError(Exception):
+    pass
 
+
+def std_in() -> tuple[str, str]:
     print("Input Stream active. Enter archivist ID: ", end="", flush=True)
     arch_id = sys.stdin.readline().rstrip("\n")
     if not arch_id:
-        print("Error: No archivist ID received!\n")
-        return []
+        raise VaultError("Error: No archivist ID received!\n")
 
     status_report = input("Input Stream active. Enter status report: ")
     if not status_report:
-        print("Error: No status report received!\n")
-        return []
-    return [status_report, arch_id]
+        raise VaultError("Error: No status report received!\n")
+
+    return status_report, arch_id
 
 
-def std_out(arch_status: list[str]) -> None:
-    sys.stdout.write(f"\n[STANDARD] Archive status from {arch_status[1]}: "
-                     f"{arch_status[0]}\n")
+def std_out(status_report: str, arch_id: str) -> None:
+    sys.stdout.write(f"[STANDARD] Archive status from {arch_id}: "
+                     f"{status_report}\n")
     std_err()
 
     sys.stdout.write("[STANDARD] Data transmission complete\n")
@@ -32,12 +32,17 @@ def std_err() -> None:
 
 
 def main() -> None:
-    print("=== CYBER ARCHIVES - COMMUNICATION SYSTEM ===\n")
-
-    std_out(std_in())
-
+    print("=== CYBER ARCHIVES - COMMUNICATION SYSTEM ===")
     print()
-    print("Three-channel communication test successful\n")
+
+    try:
+        status_report, arch_id = std_in()
+        print()
+        std_out(status_report, arch_id)
+        print()
+        print("Three-channel communication test successful")
+    except VaultError as e:
+        sys.stderr.write(str(e))
 
 
 if __name__ == "__main__":
