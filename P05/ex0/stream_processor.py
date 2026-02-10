@@ -12,7 +12,7 @@ class DataProcessor(ABC):
         pass
 
     def format_output(self, result: str) -> str:
-        return "Output:"
+        return f"Output: {result}"
 
 
 class NumericProcessor(DataProcessor):
@@ -41,7 +41,7 @@ class NumericProcessor(DataProcessor):
         return True
 
     def format_output(self, result: str) -> str:
-        return f"{super().format_output(result)} {result}"
+        return f"{super().format_output(result)}"
 
 
 class TextProcessor(DataProcessor):
@@ -57,7 +57,7 @@ class TextProcessor(DataProcessor):
         return False
 
     def format_output(self, result: str) -> str:
-        return f"{super().format_output(result)} {result}"
+        return f"{super().format_output(result)}"
 
 
 class LogProcessor(DataProcessor):
@@ -70,7 +70,7 @@ class LogProcessor(DataProcessor):
         level: str = parts[0].strip().upper()
         message: str = parts[1].strip()
 
-        if level in {"WARNINR", "ERROR", "CRITICAL"}:
+        if level in {"WARNING", "ERROR", "CRITICAL"}:
             level_type: str = "ALERT"
         else:
             level_type = level
@@ -90,8 +90,7 @@ class LogProcessor(DataProcessor):
         return True
 
     def format_output(self, result: str) -> str:
-        base = super().format_output(result)
-        return f"{base} {result}"
+        return f"{super().format_output(result)}"
 
 
 def run(processor: DataProcessor, data: Any) -> None:
@@ -116,10 +115,10 @@ def polymorphic_demo() -> None:
     ]
 
     for i, (p, d) in enumerate(zip(processors, inputs), 1):
-        print(f"Result {i}: {p.process(d)}")
+        result = p.process(d)
+        print(f"Result {i}: {p.format_output(result)}")
 
     print("\nFoundation systems online. Nexus ready for advanced streams.")
-    print()
 
 
 def main() -> None:

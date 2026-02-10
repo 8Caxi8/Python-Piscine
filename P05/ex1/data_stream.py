@@ -5,6 +5,7 @@ from typing import List, Any, Optional, Dict, Union, Set
 class DataStream(ABC):
     def __init__(self, stream_id: str) -> None:
         self._stream_id: str = stream_id
+        self._batch_size: int = 0
 
     @abstractmethod
     def process_batch(self, data_batch: List[Any]) -> str:
@@ -32,29 +33,32 @@ class DataStream(ABC):
     def get_stats(self) -> Dict[str, Union[str, int, float]]:
         return {"size": str(self._batch_size)}
 
+    def format_output(self) -> str:
+        return f"- {self._type}:"
+
 
 class SensorStream(DataStream):
     _stats: List[str] = ["temp", "humidity", "pressure"]
-    _filters: Set[str] = ["low_temp"]
+    _filters: Set[str] = {"low_temp"}
 
     def __init__(self, stream_id: str) -> None:
         super().__init__(stream_id)
-        self._type: str = "Enviromental Data"
+        self._type: str = "Sensor data"
         self._data: list[tuple[str, float]] = []
         self._stats: Dict[str, Union[str, float]] = {}
 
         print("Initializing Sensor Stream...")
-        print(f"Stream ID: {self._stream_id}, Type: {self._type}")
+        print(f"Stream ID: {self._stream_id}, Type: Environmental Data")
 
     def process_batch(self, data_batch: List[Any]) -> str:
-        self._batch_size: int = len(data_batch)
+        self._batch_size = len(data_batch)
 
         try:
             for item in data_batch:
                 key, value = item.split(":")
                 self._data.append((key, float(value)))
         except ValueError as e:
-            return ValueError(f"Invalid data format: {e}")
+            raise ValueError(f"Invalid data format: {e}\n")
 
         result = ", ".join(
             f"{key}:{value:g}" for key, value in self._data
@@ -89,7 +93,7 @@ class SensorStream(DataStream):
                         filtered.append((key, value_float))
 
             except ValueError as e:
-                raise ValueError(f"Invalid data format: {e}")
+                raise ValueError(f"Invalid data format: {e}\n")
 
         return filtered
 
@@ -102,11 +106,14 @@ class SensorStream(DataStream):
 
         return stats
 
+    def format_output(self) -> str:
+        return f"{super().format_output()}"
+
 
 class TransactionStream(DataStream):
-    def __init__(self, stream_id: int):
+    def __init__(self, stream_id: str):
         super().__init__(stream_id)
-        self._type: str = "Financial Data"
+        self._type: str = "Transaction data"
         self._data: list[tuple[str, int]] = []
         self._stats: Dict[str, Union[str, int]] = {}
 
@@ -114,14 +121,14 @@ class TransactionStream(DataStream):
         print(f"Stream ID: {self._stream_id}, type: Financial Data")
 
     def process_batch(self, data_batch: List[Any]) -> str:
-        self._batch_size: int = len(data_batch)
+        self._batch_size = len(data_batch)
 
         try:
             for item in data_batch:
                 key, value = item.split(":")
                 self._data.append((key, int(value)))
         except ValueError as e:
-            return ValueError(f"Invalid data format: {e}")
+            raise ValueError(f"Invalid data format: {e}\n")
 
         result = ", ".join(
             f"{key}:{value:g}" for key, value in self._data
@@ -152,19 +159,22 @@ class TransactionStream(DataStream):
 
         return stats
 
+    def format_output(self) -> str:
+        return f"{super().format_output()}"
+
 
 class EventStream(DataStream):
-    def __init__(self, stream_id: int):
+    def __init__(self, stream_id: str):
         super().__init__(stream_id)
-        self._type: str = "Financial Data"
+        self._type: str = "Event data"
         self._data: list[str] = []
         self._stats: Dict[str, Union[str, int]] = {}
 
-        print("Initializing Transaction Stream...")
+        print("Initializing Event Stream...")
         print(f"Stream ID: {self._stream_id}, type: System Events")
 
     def process_batch(self, data_batch: List[Any]) -> str:
-        self._batch_size: int = len(data_batch)
+        self._batch_size = len(data_batch)
         events: Set[str] = {"login", "error", "warning", "logout"}
 
         try:
@@ -172,9 +182,9 @@ class EventStream(DataStream):
                 if item in events:
                     self._data.append(item)
                 else:
-                    raise ValueError(f"'{item}' is not a possible event.")
+                    raise ValueError(f"'{item}' is not a possible event.\n")
         except ValueError as e:
-            return ValueError(f"Invalid data format: {e}")
+            raise ValueError(f"Invalid data format: {e}\n")
 
         result: str = ", ".join(
             f"{value}" for value in self._data
@@ -204,6 +214,9 @@ class EventStream(DataStream):
 
         return stats
 
+    def format_output(self) -> str:
+        return f"{super().format_output()}"
+
 
 class StreamProcessor:
     def __init__(self, batch_streams: List[DataStream]) -> None:
@@ -213,25 +226,30 @@ class StreamProcessor:
     def batch_process(self) -> None:
         for stream in self._batch_streams:
             operations = stream.get_stats()
-            if isinstance(stream, SensorStream):
-                print(f"- Sensor data: {operations['size']}")
-            elif isinstance(stream, TransactionStream):
-                print(f"- Transaction data: {operations['size']}")
-            elif isinstance(stream, EventStream):
-                print(f"- Event data: {operations['size']}")
+            print(f"{stream.format_output()} {operations['size']}")
 
 
 def main() -> None:
     print("=== CODE NEXUS - POLYMORPHIC STREAM SYSTEM ===\n")
 
     sensor: SensorStream = SensorStream("SENSOR_001")
-    print(sensor.process_batch(["temp:22.5", "humidity:65", "pressure:1013"]))
+    try:
+        print(sensor.process_batch(
+            ["temp:22.5", "humidity:65", "pressure:1013"]))
+    except ValueError as e:
+        print(e)
 
     trans: TransactionStream = TransactionStream("TRANS_001")
-    print(trans.process_batch(["buy:100", "sell:150", "buy:75"]))
+    try:
+        print(trans.process_batch(["buy:100", "sell:150", "buy:75"]))
+    except ValueError as e:
+        print(e)
 
     event: EventStream = EventStream("EVENT_001")
-    print(event.process_batch(["login", "error", "logout"]))
+    try:
+        print(event.process_batch(["login", "error", "logout"]))
+    except ValueError as e:
+        print(e)
 
     print("=== Polymorphic Stream Processing ===")
     processor: StreamProcessor = StreamProcessor([sensor, trans, event])
