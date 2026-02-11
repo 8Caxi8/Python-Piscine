@@ -8,6 +8,9 @@ def preservation() -> None:
             file.write(PROTOCOLS)
             print(PROTOCOLS)
 
+        if not file.closed:
+            print("Sorage vault was not correctly sealed!\n")
+
     except OSError as e:
         print(f"Storage vault error: {e}.\n")
 

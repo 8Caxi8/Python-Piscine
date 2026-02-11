@@ -44,6 +44,7 @@ class JSONAdapter(ProcessingPipeline):
         try:
             processed: str = self.run_stages(data)
             print()
+        
         return self.run_stages(data)
 
 
@@ -67,7 +68,6 @@ class ProcessingStage(Protocol):
     def process(self, data: Any) -> Any:
         pass
 
- .
     
 class InputStage:
     def process(self, data: Any) -> Dict:
