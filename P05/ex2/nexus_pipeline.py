@@ -2,15 +2,6 @@ from abc import ABC, abstractmethod
 from typing import List, Any, Dict, Union, Protocol
 
 
-class NexusManager:
-    pipelines: List[ProcessingPipeline]
-    def add_pipeline():
-        pass
-
-    def process_data():
-        pass
-
-
 class ProcessingPipeline(ABC):
     def __init__(self):
         self.stages: List[ProcessingStage] = []
@@ -41,10 +32,6 @@ class JSONAdapter(ProcessingPipeline):
         print("Processing JSON data through pipeline...")
         print(f"Input: {data}")
 
-        try:
-            processed: str = self.run_stages(data)
-            print()
-        
         return self.run_stages(data)
 
 
@@ -68,7 +55,7 @@ class ProcessingStage(Protocol):
     def process(self, data: Any) -> Any:
         pass
 
-    
+
 class InputStage:
     def process(self, data: Any) -> Dict:
         pass
@@ -85,25 +72,41 @@ class OutputStage:
 
 
 class NexusManager:
-    def __init__(self) -> None:
-        self.pipelines = []
-    
-    def add_pipeline(self, pipeline: ProcessingPipeline) -> None:
-        self.pipeline.append(pipeline)
+    pipelines = []
 
-    def process_data(self, pipeline, data) -> str:
-        return pipeline.process(data)
+    @classmethod
+    def add_pipeline(cls, pipeline: ProcessingPipeline):
+        cls.pipelines.append(pipeline)
+
+    @classmethod
+    def process_data(cls):
+        for pip in cls.pipelines:
+            pip.process()
 
 
 def main() -> None:
-    json_data = {"sensor":"temp","value":23.5,"unit":"C"}
-    csv_data = "user_001,LOGIN,2025-02-10"
-    stream_data = [21.9, 22.5, 22.0, 21.7, 22.4]
+    diferent_types_of_data = [
+        {"sensor": "temp", "value": 23.5, "unit": "C"},
+        "user_001,LOGIN,2025-02-10",
+        [21.9, 22.5, 22.0, 21.7, 22.4]
+    ]
+
+    adapters = [JSONAdapter, CSVAdapter, StreamAdapter]
+    pipeline = []
 
     print("Creating Data Processing Pipeline...")
     print("Stage 1: Input validation and parsing")
     print("Stage 2: Data transformation and enrichment")
     print("Stage 3: Output formatting and delivery")
+
+    for data, adapter in zip(diferent_types_of_data, adapters):
+        pipeline.append(adapter(data))
+
+    nexus = NexusManager()
+    for pip in pipeline:
+        nexus.add_pipeline(pip)
+
+    nexus.process_data()
 
 
 if __name__ == "__main__":
