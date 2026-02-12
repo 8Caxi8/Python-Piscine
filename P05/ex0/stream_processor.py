@@ -18,9 +18,9 @@ class DataProcessor(ABC):
 class NumericProcessor(DataProcessor):
     def process(self, data: Any) -> str:
         if isinstance(data, list):
-            numbers: List[float] = [float(x) for x in data]
+            numbers = [float(x) for x in data]
         else:
-            numbers: List[float] = [float(data)]
+            numbers = [float(data)]
 
         no: int = len(numbers)
         total: float = sum(numbers)

@@ -6,7 +6,7 @@ def list_comprehensions(data: dict[str, Any]) -> None:
     high_scorers: list[str] = []
     active_players: list[str] = []
 
-    high_scorers: list[str] = [
+    high_scorers = [
         player
         for player, value in data["players"].items()
         if value["total_score"] > 2000]
@@ -27,8 +27,8 @@ def list_comprehensions(data: dict[str, Any]) -> None:
 
 def dict_comprehensions(data: dict[str, Any]) -> None:
     player_scores: dict[str, int] = {}
-    categories: dict[str, str] = {}
-    count_scores: dict[str, str] = {}
+    categories: dict[str, Any] = {}
+    count_scores: dict[str, Any] = {}
 
     player_scores = {
         player: info["total_score"]

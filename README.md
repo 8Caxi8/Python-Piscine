@@ -14,6 +14,6 @@ These are a series of projects designed to introduce the Python programming lang
 
 - **Module 04 (** *v 2.1* **):** Introcution to file handling and secure resource management using the `with` statement. Implementing error handling with exceptions such as `FileNotFoundError`, `PermissionError`, and `OSError`. Introduction to system-level communication through the `sys` module, working with `sys.stdin`, `sys.stdout`, and `sys.stderr` to properly separate input, standard output, and alert output channels.
 
-- **Module 05 (** *v 2.1* **):** Introcution Abstract classes and abstract methods (importing the `ABC` and `abstractmethod` modules). Creating **method overriding** and building **interfaces** to manage multiple data types with a **polymorphic** design. Using the `Protocol` class to implement duck typing.
+- **Module 05 (** *v 2.0* **):** Introcution Abstract classes and abstract methods (importing the `ABC` and `abstractmethod` modules). Creating **method overriding** and building **interfaces** to manage multiple data types with a **polymorphic** design. Using the `Protocol` class to implement duck typing.
 
 - **Module 06 (*v 1.1*):** Introduction to Python package architecture through the use of `__init__.py` files. Learned how to import objects from custom modules using `from ... import`, and understood the difference between **absolute imports** and **relative imports**. Avoiding **circular dependencies**, using strategies like **late imports**, **dependency injection**, **shared modules**.

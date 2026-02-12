@@ -15,8 +15,8 @@ def display_inventory(inventory: dict[str, int]) -> None:
 
 
 def inventory_stats(inventory: dict[str, int]) -> None:
-    max_item: str = max(inventory, key=inventory.get)
-    min_item: str = min(inventory, key=inventory.get)
+    max_item: str = max(inventory, key=lambda k: inventory[k])
+    min_item: str = min(inventory, key=lambda k: inventory[k])
 
     print(f"Most abundant: {max_item} ({inventory[max_item]} units)")
     print(f"Least abundant: {min_item} ({inventory[min_item]} units)\n")
@@ -63,7 +63,7 @@ def calculate_score(inventory: dict[str, int],
     total_score: int = 0
 
     for key, value in inventory.items():
-        total_score += catalog[key]["value"] * value
+        total_score += int(catalog[key]["value"]) * value
 
     print(f"Inventory score: {total_score}\n")
 

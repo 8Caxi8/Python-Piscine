@@ -4,7 +4,7 @@ from typing import List, Any, Dict, Union, Protocol
 
 class ProcessingPipeline(ABC):
     def __init__(self):
-        self.stages: List[ProcessingStage] = []
+        self.stages = []
 
         self.add_stage(InputStage())
         self.add_stage(TransformStage())
@@ -37,7 +37,8 @@ class JSONAdapter(ProcessingPipeline):
 
 class CSVAdapter(ProcessingPipeline):
     def __init__(self, pipeline_id: str) -> None:
-        pass
+        self.pipeline_id = pipeline_id
+        super().__init__()
 
     def process(self, data: List[Any]) -> Dict[str, Union[str, float]]:
         pass
@@ -45,7 +46,8 @@ class CSVAdapter(ProcessingPipeline):
 
 class StreamAdapter(ProcessingPipeline):
     def __init__(self, pipeline_id: str) -> None:
-        pass
+        self.pipeline_id = pipeline_id
+        super().__init__()
 
     def process(self, data: List[Any]) -> Dict[str, Union[str, float]]:
         pass

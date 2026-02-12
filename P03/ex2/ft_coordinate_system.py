@@ -6,10 +6,11 @@ class CoordError(Exception):
 
 
 def parse_coordinates(parsed_coordinates: str) -> tuple[int, int, int]:
-    coordinates: tuple[int, int, int]
-
     print(f'Parsing coordinates: "{parsed_coordinates}"')
-    coordinates = tuple(coordinates_check(parsed_coordinates))
+
+    x, y, z = tuple(coordinates_check(parsed_coordinates))
+    coordinates = (x, y, z)
+
     print(f"Parsed position: {coordinates}")
 
     return coordinates

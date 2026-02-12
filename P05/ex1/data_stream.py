@@ -33,19 +33,19 @@ class DataStream(ABC):
     def get_stats(self) -> Dict[str, Union[str, int, float]]:
         return {"size": str(self._batch_size)}
 
+    @abstractmethod
     def format_output(self) -> str:
-        return f"- {self._type}:"
+        pass
 
 
 class SensorStream(DataStream):
-    _stats: List[str] = ["temp", "humidity", "pressure"]
+    # _stats: List[str] = ["temp", "humidity", "pressure"]
     _filters: Set[str] = {"low_temp"}
 
     def __init__(self, stream_id: str) -> None:
         super().__init__(stream_id)
         self._type: str = "Sensor data"
         self._data: list[tuple[str, float]] = []
-        self._stats: Dict[str, Union[str, float]] = {}
 
         print("Initializing Sensor Stream...")
         print(f"Stream ID: {self._stream_id}, Type: Environmental Data")
@@ -60,16 +60,12 @@ class SensorStream(DataStream):
         except ValueError as e:
             raise ValueError(f"Invalid data format: {e}\n")
 
-        result = ", ".join(
+        self._result = ", ".join(
             f"{key}:{value:g}" for key, value in self._data
         )
 
         self._stats = self.get_stats()
-        return (
-            f"Processing sensor batch: [{result}]\n"
-            f"Sensor analysis: {self._stats["size"]}, "
-            f"avg temp: {self._stats["avg_temp"]}ºC\n"
-        )
+        return self.format_output()
 
     def filter_data(self, data_batch: List[Any], criteria: Optional[str]
                     = None) -> List[Any]:
@@ -99,7 +95,6 @@ class SensorStream(DataStream):
 
     def get_stats(self) -> Dict[str, Union[str, int, float]]:
         stats = super().get_stats()
-        stats["size"] += " readings processed"
 
         temps = [value for key, value in self._data if key == "temp"]
         stats["avg_temp"] = sum(temps) / len(temps) if temps else 0.0
@@ -107,7 +102,11 @@ class SensorStream(DataStream):
         return stats
 
     def format_output(self) -> str:
-        return f"{super().format_output()}"
+        return (
+            f"Processing sensor batch: [{self._result}]\n"
+            f"Sensor analysis: {self._stats["size"]} readings processed, "
+            f"avg temp: {self._stats["avg_temp"]}ºC\n"
+        )
 
 
 class TransactionStream(DataStream):
@@ -115,7 +114,6 @@ class TransactionStream(DataStream):
         super().__init__(stream_id)
         self._type: str = "Transaction data"
         self._data: list[tuple[str, int]] = []
-        self._stats: Dict[str, Union[str, int]] = {}
 
         print("Initializing Transaction Stream...")
         print(f"Stream ID: {self._stream_id}, type: Financial Data")
@@ -130,16 +128,12 @@ class TransactionStream(DataStream):
         except ValueError as e:
             raise ValueError(f"Invalid data format: {e}\n")
 
-        result = ", ".join(
+        self._result = ", ".join(
             f"{key}:{value:g}" for key, value in self._data
         )
 
         self._stats = self.get_stats()
-        return (
-            f"Processing transaction batch: [{result}]\n"
-            f"Transaction analysis: {self._stats["size"]}, "
-            f"net flow: {self._stats["net_flow"]:+d} units\n"
-        )
+        return self.format_output()
 
     def filter_data(self, data_batch: List[Any], criteria: Optional[str]
                     = None) -> List[Any]:
@@ -150,7 +144,6 @@ class TransactionStream(DataStream):
 
     def get_stats(self) -> Dict[str, Union[str, int, float]]:
         stats = super().get_stats()
-        stats["size"] += " operations processed"
 
         income = [value for key, value in self._data if key == "buy"]
         outcome = [value for key, value in self._data if key == "sell"]
@@ -160,7 +153,12 @@ class TransactionStream(DataStream):
         return stats
 
     def format_output(self) -> str:
-        return f"{super().format_output()}"
+        return (
+            f"Processing transaction batch: [{self._result}]\n"
+            f"Transaction analysis: {self._stats["size"]}"
+            " operations processed, "
+            f"net flow: {self._stats["net_flow"]:+d} units\n"
+        )
 
 
 class EventStream(DataStream):
@@ -168,7 +166,6 @@ class EventStream(DataStream):
         super().__init__(stream_id)
         self._type: str = "Event data"
         self._data: list[str] = []
-        self._stats: Dict[str, Union[str, int]] = {}
 
         print("Initializing Event Stream...")
         print(f"Stream ID: {self._stream_id}, type: System Events")
@@ -186,16 +183,12 @@ class EventStream(DataStream):
         except ValueError as e:
             raise ValueError(f"Invalid data format: {e}\n")
 
-        result: str = ", ".join(
+        self._result: str = ", ".join(
             f"{value}" for value in self._data
         )
 
         self._stats = self.get_stats()
-        return (
-            f"Processing event batch: [{result}]\n"
-            f"Event analysis: {self._stats["size"]}, "
-            f"{self._stats["error"]} error detected\n"
-        )
+        return self.format_output()
 
     def filter_data(self, data_batch: List[Any], criteria: Optional[str]
                     = None) -> List[Any]:
@@ -205,8 +198,7 @@ class EventStream(DataStream):
         return super().filter_data(data_batch, criteria)
 
     def get_stats(self) -> Dict[str, Union[str, int, float]]:
-        stats: Dict[str, Union[int, str]] = super().get_stats()
-        stats["size"] += " events processed"
+        stats = super().get_stats()
 
         errors: List = [value for value in self._data if value == "error"]
 
@@ -215,7 +207,11 @@ class EventStream(DataStream):
         return stats
 
     def format_output(self) -> str:
-        return f"{super().format_output()}"
+        return (
+            f"Processing event batch: [{self._result}]\n"
+            f"Event analysis: {self._stats["size"]} events processed, "
+            f"{self._stats["error"]} error detected\n"
+        )
 
 
 class StreamProcessor:
