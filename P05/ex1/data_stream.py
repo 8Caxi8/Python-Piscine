@@ -104,8 +104,8 @@ class SensorStream(DataStream):
     def format_output(self) -> str:
         return (
             f"Processing sensor batch: [{self._result}]\n"
-            f"Sensor analysis: {self._stats["size"]} readings processed, "
-            f"avg temp: {self._stats["avg_temp"]}ºC\n"
+            f"Sensor analysis: {self._stats['size']} readings processed, "
+            f"avg temp: {self._stats['avg_temp']}ºC\n"
         )
 
 
@@ -155,9 +155,9 @@ class TransactionStream(DataStream):
     def format_output(self) -> str:
         return (
             f"Processing transaction batch: [{self._result}]\n"
-            f"Transaction analysis: {self._stats["size"]}"
+            f"Transaction analysis: {self._stats['size']}"
             " operations processed, "
-            f"net flow: {self._stats["net_flow"]:+d} units\n"
+            f"net flow: {self._stats['net_flow']:+d} units\n"
         )
 
 
@@ -209,8 +209,8 @@ class EventStream(DataStream):
     def format_output(self) -> str:
         return (
             f"Processing event batch: [{self._result}]\n"
-            f"Event analysis: {self._stats["size"]} events processed, "
-            f"{self._stats["error"]} error detected\n"
+            f"Event analysis: {self._stats['size']} events processed, "
+            f"{self._stats['error']} error detected\n"
         )
 
 
