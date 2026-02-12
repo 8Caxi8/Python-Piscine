@@ -1,10 +1,8 @@
-SYSTEM = "system"
-SECURITY = "security"
-CORRUPTED = "corrupted"
-STANDARD = "standard"
-
-
 def access_file(file_name: str) -> str:
+    SYSTEM = "system"
+    SECURITY = "security"
+    CORRUPTED = "corrupted"
+    STANDARD = "standard"
 
     try:
         with open(file_name, "r") as file:
