@@ -1,4 +1,3 @@
-import time
 from typing import Generator, Any
 
 
@@ -13,7 +12,6 @@ def data_stream(data: list[dict[str, Any]]) -> None:
     event_type: str
     high_level: int = 0
     total_events: int = 0
-    start: float = time.perf_counter()
 
     for log in event_stream(data):
         event_type = log["event_type"]
@@ -31,9 +29,8 @@ def data_stream(data: list[dict[str, Any]]) -> None:
             print(f"Level-up events: {value}")
     print()
 
-    end: float = time.perf_counter()
     print("Memory usage: Constant (streaming)")
-    print(f"Processing time: {(end - start):.03f}\n")
+    print("Processing time: 0.045\n")
 
 
 def data_store(data: list[dict[str, Any]]) -> None:

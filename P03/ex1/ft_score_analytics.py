@@ -2,9 +2,8 @@ import sys
 
 
 def score_analytics() -> None:
-    scores: list[int] = []
-    score: int
-    args: list[str] = sys.argv[1:]
+    scores = []
+    args = sys.argv[1:]
 
     if not args:
         print("No scores provided. Usage: python3 ft_score_analytics.py"

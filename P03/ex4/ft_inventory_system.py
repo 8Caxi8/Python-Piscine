@@ -1,3 +1,7 @@
+import sys
+from typing import Tuple
+
+
 def get_total_items(inventory: dict[str, int]) -> int:
     return sum(inventory.values())
 
@@ -60,25 +64,18 @@ def dictionary_properties(inventory: dict[str, int]) -> None:
 
 def calculate_score(inventory: dict[str, int],
                     catalog: dict[str, dict[str, str | int]]) -> None:
-    total_score: int = 0
+    total_score = 0
 
     for key, value in inventory.items():
-        total_score += int(catalog[key]["value"]) * value
+        total_score += int(catalog[key].get("value", 0)) * value
 
     print(f"Inventory score: {total_score}\n")
 
 
-def main() -> None:
-    inventory: dict[str, int] = {
-        "potion": 5,
-        "chest_armor": 3,
-        "shield": 2,
-        "sword": 1,
-        "helmet": 1,
-    }
-
+def get_inventory() -> Tuple[dict[str, int], dict[str, dict[str, str | int]]]:
+    inventory = dict()
     catalog: dict[str, dict[str, str | int]] = {
-        "chest_armor": {
+        "armor": {
             "type": "armor",
             "value": 150,
             "rarity": "uncommon",
@@ -104,6 +101,41 @@ def main() -> None:
             "rarity": "common",
         },
     }
+
+    if len(sys.argv) == 1:
+        inventory = {
+            "potion": 5,
+            "armor": 3,
+            "shield": 2,
+            "sword": 1,
+            "helmet": 1,
+        }
+        return inventory, catalog
+    else:
+        for arg in sys.argv[1:]:
+            try:
+                key, value = arg.split(":")
+                inventory.update({key: int(value)})
+            except ValueError:
+                raise ValueError("ItemsError: ft_inventory_system.py "
+                                 "<key1:value1> <key2:value2> ...\n"
+                                 "Possible items: 'chest_armor', 'shield', "
+                                 "'sword', 'helmet', 'potion'\n")
+            if key not in catalog.keys():
+                raise ValueError("ItemsError: ft_inventory_system.py "
+                                 "<key1:value1> <key2:value2> ...\n"
+                                 "Possible items: 'chest_armor', 'shield', "
+                                 "'sword', 'helmet', 'potion'\n")
+
+    return inventory, catalog
+
+
+def main() -> None:
+    try:
+        inventory, catalog = get_inventory()
+    except ValueError as e:
+        print(e)
+        return
 
     print("=== Inventory System Analysis ===")
 
