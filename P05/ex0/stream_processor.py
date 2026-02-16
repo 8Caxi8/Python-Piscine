@@ -3,20 +3,45 @@ from abc import ABC, abstractmethod
 
 
 class DataProcessor(ABC):
+    """
+    Abstract base class defining the interface for all data processors.
+
+    Subclasses must implement validate and process
+    for specific data types.
+    """
     @abstractmethod
     def validate(self, data: Any) -> bool:
+        """
+        Validate whether the provided data is suitable
+        for this processor.
+        """
         pass
 
     @abstractmethod
     def process(self, data: Any) -> str:
+        """
+        Process the provided data and return a result string.
+        """
         pass
 
     def format_output(self, result: str) -> str:
+        """
+        Format the processed result for display
+        """
         return f"Output: {result}"
 
 
 class NumericProcessor(DataProcessor):
+    """
+    Processor specialized for numeric data.
+
+    Handles single numeric values or lists of numbers and computs
+    summary statistics.
+    """
     def process(self, data: Any) -> str:
+        """
+        Calculate count, sum, and average of numeric data
+        """
         if isinstance(data, list):
             numbers = [float(x) for x in data]
         else:
@@ -28,6 +53,9 @@ class NumericProcessor(DataProcessor):
         return f"Processed {no} numeric values, sum={total}, avg={avg}"
 
     def validate(self, data: Any) -> bool:
+        """
+        Ensure data can be converted to float values
+        """
         try:
             if isinstance(data, list):
                 for value in data:
@@ -45,12 +73,23 @@ class NumericProcessor(DataProcessor):
 
 
 class TextProcessor(DataProcessor):
+    """
+    Processor specialized for text data.
+
+    Computes characters and word statistics.
+    """
     def process(self, data: Any) -> str:
+        """
+        Count characters and words in text.
+        """
         characters: int = len(str(data))
         words: int = len(str(data).split())
         return f"Processed text: {characters} characters, {words} words."
 
     def validate(self, data: Any) -> bool:
+        """
+        Validate that data is a string.
+        """
         if isinstance(data, str):
             print("Validation: Text data verified")
             return True
@@ -61,11 +100,19 @@ class TextProcessor(DataProcessor):
 
 
 class LogProcessor(DataProcessor):
+    """
+    Processor specialized for structured log entries.
+
+    Expects log format: 'Level: message'
+    """
     levels: set[str] = {
             "NOTSET", "DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL",
         }
 
     def process(self, data: Any) -> str:
+        """
+        Extract log level and message and categorize severity.
+        """
         parts: List[str] = data.split(":", 1)
         level: str = parts[0].strip().upper()
         message: str = parts[1].strip()
@@ -78,6 +125,9 @@ class LogProcessor(DataProcessor):
         return f"[{level_type}] {level} level detected: {message}"
 
     def validate(self, data: Any) -> bool:
+        """
+        Validate that log entry contains a recognized log level.
+        """
         try:
             parts: List = data.split(":", 1)
             level = parts[0].strip().upper()
@@ -94,12 +144,20 @@ class LogProcessor(DataProcessor):
 
 
 def run(processor: DataProcessor, data: Any) -> None:
+    """
+    Execute validation, processing, and formatting.
+    for a given processor instance.
+    """
     print(f"Processing data: {data}")
     print(processor.format_output(processor.process(data)))
     print()
 
 
 def polymorphic_demo() -> None:
+    """
+    Demonstrate polymorphic behavior by processing
+    different data types through the same interface.
+    """
     print("Processing multiple data types through same interface...")
 
     processors: list[DataProcessor] = [

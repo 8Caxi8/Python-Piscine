@@ -3,17 +3,33 @@ from typing import List, Any, Optional, Dict, Union, Set
 
 
 class DataStream(ABC):
+    """
+    Abstract base class representing a generic data stream.
+
+    Defines the interface for batch processing, filtering,
+    statistics retrieval, and output formatting."""
+
     def __init__(self, stream_id: str) -> None:
         self._stream_id: str = stream_id
         self._batch_size: int = 0
 
     @abstractmethod
     def process_batch(self, data_batch: List[Any]) -> str:
+        """
+        Process a batch of incoming data.
+
+        Must be implemented by subclasses.
+        """
         pass
 
     def filter_data(self, data_batch: List[Any], criteria: Optional[str]
                     = None) -> List[Any]:
         filtered: List[Any] = []
+        """
+        Filter batch data according to a given criteria.
+
+        Subclasses may override for domain-specific filtering.
+        """
 
         if not criteria:
             return data_batch
@@ -39,7 +55,11 @@ class DataStream(ABC):
 
 
 class SensorStream(DataStream):
-    # _stats: List[str] = ["temp", "humidity", "pressure"]
+    """
+    Specialized data stream for environmental sensor readings.
+
+    Handles temperature and computes average temperature statistics.
+    """
     _filters: Set[str] = {"low_temp"}
 
     def __init__(self, stream_id: str) -> None:
@@ -51,6 +71,9 @@ class SensorStream(DataStream):
         print(f"Stream ID: {self._stream_id}, Type: Environmental Data")
 
     def process_batch(self, data_batch: List[Any]) -> str:
+        """
+        Parse sensor reading and compute statistics.
+        """
         self._batch_size = len(data_batch)
 
         try:
@@ -94,6 +117,9 @@ class SensorStream(DataStream):
         return filtered
 
     def get_stats(self) -> Dict[str, Union[str, int, float]]:
+        """
+        Calculate stream statistics such as average temperature.
+        """
         stats = super().get_stats()
 
         temps = [value for key, value in self._data if key == "temp"]
@@ -110,6 +136,11 @@ class SensorStream(DataStream):
 
 
 class TransactionStream(DataStream):
+    """
+    Specialized data stream for financial transactions.
+
+    Processes buy/sel operations and calculates net flow.
+    """
     def __init__(self, stream_id: str):
         super().__init__(stream_id)
         self._type: str = "Transaction data"
@@ -162,6 +193,11 @@ class TransactionStream(DataStream):
 
 
 class EventStream(DataStream):
+    """
+    Specialized data stream for system events.
+
+    Tracks event occurences and counts error events.
+    """
     def __init__(self, stream_id: str):
         super().__init__(stream_id)
         self._type: str = "Event data"
@@ -215,11 +251,22 @@ class EventStream(DataStream):
 
 
 class StreamProcessor:
+    """
+    Manager class that processes multiple DataStream
+    instances polymorphically.
+
+    Demonstrates subtype polymorphism by treating
+    all stream types through a shared interface.
+    """
     def __init__(self, batch_streams: List[DataStream]) -> None:
         self._batch_streams: List[DataStream] = batch_streams
         print("Processing mixed stream types through unified interface...\n")
 
     def batch_process(self) -> None:
+        """
+        Entry point for demonstrating polymorphic
+        data stream processing.
+        """
         for stream in self._batch_streams:
             operations = stream.get_stats()
             print(f"{stream.format_output()} {operations['size']}")
