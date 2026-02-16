@@ -17,3 +17,5 @@ These are a series of projects designed to introduce the Python programming lang
 - **Module 05 (** *v 2.0* **):** Introcution to advanced object-oriented design using `ABC`and `@abstractmethod` to define abstract base classes and enforce implementation contracts. Applied **method overriding** and **subtype polymorphism** to build flexible processing systems. Implemented interface-driven design using `Protocol` for duck typing, combining inheritance and composition to create scalable, multi-stage data pipelines with structured error handling and polymorphic orchestration.
 
 - **Module 06 (*v 1.1*):** Introduction to Python package architecture through the use of `__init__.py` files. Learned how to import objects from custom modules using `from ... import`, and understood the difference between **absolute imports** and **relative imports**. Avoiding **circular dependencies**, using strategies like **late imports**, **dependency injection**, **shared modules**.
+
+- **Module 07 (*v 2.0*):**
