@@ -1,3 +1,8 @@
+"""
+Creating a sophisticated data streaming system that demonstrates advanced
+polymorphic behavior. Building stream handlers that can process mixed
+data types while maintaining type-specific optimizations.
+"""
 from abc import ABC, abstractmethod
 from typing import List, Any, Optional, Dict, Union, Set
 

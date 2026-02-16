@@ -1,3 +1,9 @@
+"""
+Building the complete Code Nexus data processing pipeline -
+- a sophisticated system that combines multiple processing stages,
+handles complex data transformations, and demonstrates advanced
+polymorphic patterns used in real-world data engeneering.
+"""
 from abc import ABC, abstractmethod
 from typing import List, Any, Dict, Union, Protocol
 from collections import deque, Counter

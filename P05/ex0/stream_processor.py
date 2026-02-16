@@ -1,3 +1,8 @@
+"""
+Creating a polymorphic data processing system that demonstrates method
+overriding. Building a base DataProcessor class and specialized
+processors for different data types.
+"""
 from typing import Any, List
 from abc import ABC, abstractmethod
 
