@@ -274,7 +274,13 @@ class StreamProcessor:
         """
         for stream in self._batch_streams:
             operations = stream.get_stats()
-            print(f"{stream.format_output()} {operations['size']}")
+            if isinstance(stream, EventStream):
+                print(f"Event data: {operations['size']} events processed")
+            elif isinstance(stream, TransactionStream):
+                print(f"Transaction data: {operations['size']} operations "
+                      "processed")
+            elif isinstance(stream, SensorStream):
+                print(f"Sensor data: {operations['size']} readings processed")
 
 
 def main() -> None:
@@ -283,7 +289,7 @@ def main() -> None:
     sensor: SensorStream = SensorStream("SENSOR_001")
     try:
         print(sensor.process_batch(
-            ["temp:22.5", "humidity:65", "pressure:1013"]))
+            ["temp:22.5", "humidity:65"]))
     except ValueError as e:
         print(e)
 
