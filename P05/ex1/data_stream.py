@@ -116,7 +116,7 @@ class SensorStream(DataStream):
                     ):
                         filtered.append((key, value_float))
 
-            except ValueError as e:
+            except (ValueError, AttributeError) as e:
                 raise ValueError(f"Invalid data format: {e}\n")
 
         return filtered
@@ -146,6 +146,8 @@ class TransactionStream(DataStream):
 
     Processes buy/sel operations and calculates net flow.
     """
+    _filters: Set[str] = {"large"}
+
     def __init__(self, stream_id: str):
         super().__init__(stream_id)
         self._type: str = "Transaction data"
@@ -176,7 +178,26 @@ class TransactionStream(DataStream):
         if criteria is None:
             return data_batch
 
-        return super().filter_data(data_batch, criteria)
+        filtered = super().filter_data(data_batch, criteria)
+
+        if criteria in self._filters:
+            try:
+                for item in data_batch:
+                    key, value = item.split(":")
+                    value_float: float = float(value)
+
+                    if (
+                        criteria == "large"
+                        and float(value) > 100
+                    ):
+                        filtered.append((key, value_float))
+
+            except (ValueError, AttributeError) as e:
+                raise ValueError(f"Invalid data format: {e}\n")
+        else:
+            raise ValueError(f"Invalid criteria: {criteria}\n")
+
+        return filtered
 
     def get_stats(self) -> Dict[str, Union[str, int, float]]:
         stats = super().get_stats()
@@ -273,14 +294,18 @@ class StreamProcessor:
         data stream processing.
         """
         for stream in self._batch_streams:
-            operations = stream.get_stats()
-            if isinstance(stream, EventStream):
-                print(f"Event data: {operations['size']} events processed")
-            elif isinstance(stream, TransactionStream):
-                print(f"Transaction data: {operations['size']} operations "
-                      "processed")
-            elif isinstance(stream, SensorStream):
-                print(f"Sensor data: {operations['size']} readings processed")
+            try:
+                operations = stream.get_stats()
+                if isinstance(stream, EventStream):
+                    print(f"Event data: {operations['size']} events processed")
+                elif isinstance(stream, TransactionStream):
+                    print(f"Transaction data: {operations['size']} operations "
+                          "processed")
+                elif isinstance(stream, SensorStream):
+                    print(f"Sensor data: {operations['size']} "
+                          "readings processed")
+            except ValueError as e:
+                print(e)
 
 
 def main() -> None:
@@ -290,19 +315,19 @@ def main() -> None:
     try:
         print(sensor.process_batch(
             ["temp:22.5", "humidity:65"]))
-    except ValueError as e:
+    except (ValueError, TypeError) as e:
         print(e)
 
     trans: TransactionStream = TransactionStream("TRANS_001")
     try:
         print(trans.process_batch(["buy:100", "sell:150", "buy:75"]))
-    except ValueError as e:
+    except (ValueError, TypeError) as e:
         print(e)
 
     event: EventStream = EventStream("EVENT_001")
     try:
         print(event.process_batch(["login", "error", "logout"]))
-    except ValueError as e:
+    except (ValueError, TypeError) as e:
         print(e)
 
     print("=== Polymorphic Stream Processing ===")
@@ -312,18 +337,21 @@ def main() -> None:
 
     print()
     print("Stream filtering active: High-priority data only")
-    sensor_filtered: List[Any] = sensor.filter_data(
-        ["temp:5", "humidity: 70", "temp: 25", "temp: 2"],
-        "low_temp",
+    try:
+        sensor_filtered: List[Any] = sensor.filter_data(
+            ["temp:5", "humidity:70", "temp:25", "temp:2"],
+            "low_temp",
+            )
+        trans_filtered: List[Any] = trans.filter_data(
+            ["buy:100", "sell:150", "buy:75"],
+            "large",
         )
-    trans_filtered: List[Any] = trans.filter_data(
-        ["buy:100", "sell:150", "buy:75"],
-        "sell",
-    )
-    print("Filtered results: ",
-          f"{len(sensor_filtered)} critical sensor alerts ",
-          f"{len(trans_filtered)} large transaction\n",
-          )
+        print("Filtered results: ",
+              f"{len(sensor_filtered)} critical sensor alerts ",
+              f"{len(trans_filtered)} large transaction\n",
+              )
+    except (ValueError, TypeError) as e:
+        print(e)
 
     print("All streams processed successfully. Nexus throughput optimal.")
 

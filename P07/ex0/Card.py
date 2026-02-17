@@ -4,7 +4,7 @@ from abc import ABC, abstractmethod
 class Card(ABC):
     def __init__(self, name: str, cost: int, rarity: str) -> None:
         self.name = name
-        self._cost = cost
+        self.cost = cost
         self._rarity = rarity
 
     @abstractmethod
@@ -14,11 +14,11 @@ class Card(ABC):
     def get_card_info(self) -> dict:
         return {
             "name": self.name,
-            "cost": self._cost,
+            "cost": self.cost,
             "rarity": self._rarity
         }
 
     def is_playable(self, available_mana: int) -> bool:
-        if available_mana >= self._cost:
+        if available_mana >= self.cost:
             return True
         return False
