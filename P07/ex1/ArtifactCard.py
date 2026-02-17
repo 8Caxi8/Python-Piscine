@@ -11,9 +11,9 @@ class ArtifactCard(Card):
     def play(self, game_state: dict) -> dict:
         return {
             "card_played": self.name,
-            "mana_used": self._cost,
+            "mana_used": self.cost,
             "effect": self._effect
         }
 
     def activate_ability(self) -> dict:
-        print("")
+        print(f"{self.name} activated!")

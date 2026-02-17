@@ -1,7 +1,7 @@
 from ex0.Card import Card
-from ex0.Card import CreatureCard
-from . import ArtifactCard
-from . import SpellCard
+from ex0.CreatureCard import CreatureCard
+from .ArtifactCard import ArtifactCard
+from .SpellCard import SpellCard
 import random
 
 
@@ -28,7 +28,7 @@ class Deck:
 
     def get_deck_stats(self) -> dict:
         deck_stats = {}
-        avg_cost = 0
+        total_cost = 0
 
         deck_stats.update({"total_cards": len(self.cards)})
         for card in self.cards:
@@ -50,5 +50,7 @@ class Deck:
                 else:
                     no = 1
                 deck_stats.update({"spells": no})
-            avg_cost += card.cost()
-        deck_stats.update({"avg_cost": avg_cost})
+            total_cost += card.cost
+        deck_stats.update({"avg_cost": total_cost / len(self.cards)})
+
+        return deck_stats

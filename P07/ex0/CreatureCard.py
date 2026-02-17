@@ -19,11 +19,11 @@ class CreatureCard(Card):
     def play(self, game_state: dict) -> dict:
         return {
             "card_played": self.name,
-            "mana_used": self._cost,
+            "mana_used": self.cost,
             "effect": "Creature summoned to battlefield"
         }
 
-    def attack_target(self, target) -> dict:
+    def attack_target(self, target: Card) -> dict:
         return {
             "attacker": self.name,
             "target": target.name,
@@ -31,7 +31,7 @@ class CreatureCard(Card):
             "Combat_resolved": True,
         }
 
-    def get_card_info(self):
+    def get_card_info(self) -> dict:
         info = super().get_card_info()
         info.update({
             "type": self.type,
