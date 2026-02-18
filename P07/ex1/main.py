@@ -24,7 +24,7 @@ def main() -> None:
         deck.remove_card(card_drew.name)
         print(f"Drew: {card_drew.name} "
               f"({card_drew.__class__.__name__.removesuffix('Card')})")
-        print(f"Play result: {card_drew.play(None)}\n")
+        print(f"Play result: {card_drew.play({})}\n")
 
     print("Polymorphism in action: Same interface, differnt card behaviors")
 

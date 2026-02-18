@@ -11,8 +11,8 @@ class CreatureCard(Card):
         super().__init__(name, cost, rarity)
         self.type = "Creature"
         try:
-            self.validate_attack(attack)
-            self.validate_health(health)
+            self._attack = self.validate_attack(attack)
+            self._health = self.validate_health(health)
         except CardError as e:
             raise e
 
@@ -49,7 +49,7 @@ class CreatureCard(Card):
             raise CardError(f"Error creating {self.name}: attack value "
                             f"({attack}) must be a positive integer!")
         else:
-            self._attack = attack
+            return attack
 
     def validate_health(self, health: int) -> int:
         try:
@@ -60,4 +60,4 @@ class CreatureCard(Card):
             raise CardError(f"Error creating {self.name}: health value "
                             f"({health}) must be a positive integer!")
         else:
-            self._health = health
+            return health

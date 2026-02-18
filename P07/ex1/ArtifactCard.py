@@ -17,3 +17,4 @@ class ArtifactCard(Card):
 
     def activate_ability(self) -> dict:
         print(f"{self.name} activated!")
+        return {}

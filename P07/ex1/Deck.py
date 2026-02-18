@@ -27,8 +27,8 @@ class Deck:
         return self.cards.pop(0)
 
     def get_deck_stats(self) -> dict:
-        deck_stats = {}
-        total_cost = 0
+        deck_stats: dict[str, int | float] = {}
+        total_cost: int = 0
 
         deck_stats.update({"total_cards": len(self.cards)})
         for card in self.cards:
