@@ -6,6 +6,9 @@ from alchemy.potions import strength_potion
 
 
 def method_1() -> None:
+    """
+    Method imported directtly from alchemy.elements
+    """
     result = alchemy.elements.create_fire()
 
     print("Method 1 - Full module import:")
@@ -14,6 +17,9 @@ def method_1() -> None:
 
 
 def method_2() -> None:
+    """
+    Method imported from alchemy.elements import create_water
+    """
     result = create_water()
 
     print("Method 2 - Specific function import:")
@@ -21,6 +27,9 @@ def method_2() -> None:
 
 
 def method_3() -> None:
+    """
+    Method imported as a specific name, like heal()
+    """
     result = heal()
 
     print("Method 3 - Aliased import:")
@@ -28,6 +37,9 @@ def method_3() -> None:
 
 
 def method_4() -> None:
+    """
+    Multiple imports in the same line
+    """
     result = strength_potion()
 
     print("Method 4 - Multiple imports:")

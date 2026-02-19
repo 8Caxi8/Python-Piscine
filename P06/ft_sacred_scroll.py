@@ -3,6 +3,16 @@ from typing import List
 
 
 def direct_access() -> None:
+    """
+    Test direct access to element functions
+    via the internal alchemy.elements module.
+
+    This function
+    attempts to dynamically retrieve and execute a set on predefined
+    element-creation funtions from alchemy.elements.
+    If it does not exist an AttributeError is raised and caught.
+    """
+
     names: List[str] = [
         "create_fire", "create_water",
         "create_earth", "create_air"
@@ -20,6 +30,14 @@ def direct_access() -> None:
 
 
 def package_access() -> None:
+    """
+    Test package access to each element function.
+
+    This function tries to retrieve and execute element-creation
+    functions directly from the alchemy package namespace. Acess depends
+    on what is explicitly exposed in the package's __init__.py
+    """
+
     names: List[str] = [
         "create_fire", "create_water",
         "create_earth", "create_air"
