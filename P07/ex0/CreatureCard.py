@@ -11,8 +11,8 @@ class CreatureCard(Card):
         super().__init__(name, cost, rarity)
         self.type = "Creature"
         try:
-            self._attack = self.validate_attack(attack)
-            self._health = self.validate_health(health)
+            self.attack = self.validate_attack(attack)
+            self.health = self.validate_health(health)
         except CardError as e:
             raise e
 
@@ -27,7 +27,7 @@ class CreatureCard(Card):
         return {
             "attacker": self.name,
             "target": target.name,
-            "damage_dealt": self._attack,
+            "damage_dealt": self.attack,
             "Combat_resolved": True,
         }
 
@@ -35,8 +35,8 @@ class CreatureCard(Card):
         info = super().get_card_info()
         info.update({
             "type": self.type,
-            "attack": self._attack,
-            "health": self._health
+            "attack": self.attack,
+            "health": self.health
         })
         return info
 

@@ -1,13 +1,24 @@
 from .FantasyCardFactory import FantasyCardFactory
-from ex0.CreatureCard import CreatureCard
+from .AggressiveStrategy import AgressiveStrategy
+from .GameEngine import GameEngine
 
 
 def main() -> None:
-    fantasy = FantasyCardFactory()
+    factory = FantasyCardFactory()
+    strategy = AgressiveStrategy()
 
-    card: CreatureCard = fantasy.create_creature("Fire Dragon")
+    engine = GameEngine()
 
-    print(fantasy.create_themed_deck(60))
+    print("\n=== DataDeck Game Engine ===\n")
+
+    engine.configure_engine(factory, strategy)
+    print(f"Actions: {engine.simulate_turn()}\n")
+
+    print("Game Report:")
+    print(f"{engine.get_engine_status()}\n")
+
+    print("Abstract Factory + Strategy Pattern: "
+          "Maximum flexibility achieved!")
 
 
 if __name__ == "__main__":

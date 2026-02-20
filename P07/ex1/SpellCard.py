@@ -9,7 +9,7 @@ class SpellCard(Card):
 
         if effect_type not in self._effects:
             raise ValueError("SpellCardError: "
-                             "effect '{effect_type}' unknown!")
+                             f"effect '{effect_type}' unknown!")
         match effect_type:
             case "damage":
                 self.effect_type = "Deal 3 damage to target"
