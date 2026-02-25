@@ -1,4 +1,5 @@
 from ex0.Card import Card
+from ex0.Card import CardError
 from .Magical import Magical
 from .Combatable import Combatable
 
@@ -22,6 +23,12 @@ class EliteCard(Card, Combatable, Magical):
         self._combat_type = "melee"
 
     def play(self, game_state: dict) -> dict:
+        if game_state["player"]["mana"] >= self.cost:
+            game_state["player"]["mana"] -= self.cost
+            game_state["player"]["cards"].append(self)
+        else:
+            raise CardError("Error: Not enough mana!")
+
         return {
             "card_played": self.name,
             "mana_used": self.cost,
@@ -54,11 +61,14 @@ class EliteCard(Card, Combatable, Magical):
         }
 
     def defend(self, incoming_damage: int) -> dict:
+        self._health -= incoming_damage - self._armor
+        still_alive = self._health > 0
+
         return {
             "defender": self.name,
             "damage_taken": incoming_damage,
             "damage_blocked": self._armor,
-            "still_alive": self._health > incoming_damage - self._armor
+            "still_alive": still_alive,
         }
 
     def get_combat_stats(self) -> dict:
@@ -83,7 +93,6 @@ class EliteCard(Card, Combatable, Magical):
     def channel_mana(self, amount: int) -> dict:
         return {
             "channeled": amount,
-            "total_mana": self.spell_cost + amount
         }
 
     def get_magic_stats(self) -> dict:

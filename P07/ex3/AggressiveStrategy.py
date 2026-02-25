@@ -21,4 +21,7 @@ class AgressiveStrategy(GameStrategy):
         return "AggressiveStrategy"
 
     def prioritize_targets(self, available_targets: list) -> list:
+        if not available_targets:
+            return []
+
         return [random.choice(available_targets)]

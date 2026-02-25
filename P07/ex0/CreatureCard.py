@@ -1,8 +1,5 @@
 from .Card import Card
-
-
-class CardError(Exception):
-    pass
+from .Card import CardError
 
 
 class CreatureCard(Card):
@@ -10,6 +7,7 @@ class CreatureCard(Card):
                  attack: int, health: int) -> None:
         super().__init__(name, cost, rarity)
         self.type = "Creature"
+        self.effect = "Creature summoned to battlefield"
         try:
             self.attack = self.validate_attack(attack)
             self.health = self.validate_health(health)
@@ -17,18 +15,29 @@ class CreatureCard(Card):
             raise e
 
     def play(self, game_state: dict) -> dict:
+        if game_state["player"]["mana"] >= self.cost:
+            game_state["player"]["mana"] -= self.cost
+            game_state["player"]["cards"].append(self)
+        else:
+            raise CardError("Error: Not enough mana!")
+
         return {
             "card_played": self.name,
             "mana_used": self.cost,
-            "effect": "Creature summoned to battlefield"
+            "effect": self.effect
         }
 
     def attack_target(self, target: Card) -> dict:
+        if isinstance(target, CreatureCard):
+            combat_resolved = target.health <= self.attack
+        else:
+            combat_resolved = True
+
         return {
             "attacker": self.name,
             "target": target.name,
             "damage_dealt": self.attack,
-            "Combat_resolved": True,
+            "combat_resolved": combat_resolved,
         }
 
     def get_card_info(self) -> dict:

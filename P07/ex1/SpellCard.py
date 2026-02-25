@@ -1,4 +1,5 @@
 from ex0.Card import Card
+from ex0.Card import CardError
 
 
 class SpellCard(Card):
@@ -25,6 +26,12 @@ class SpellCard(Card):
                 self.attack = 0
 
     def play(self, game_state: dict) -> dict:
+        if game_state["player"]["mana"] >= self.cost:
+            game_state["player"]["mana"] -= self.cost
+            game_state["player"]["cards"].append(self)
+        else:
+            raise CardError("Error: Not enough mana!")
+
         return {
             "card_played": self.name,
             "mana_used": self.cost,

@@ -3,6 +3,7 @@ from ex0.CreatureCard import CreatureCard
 from ex1.SpellCard import SpellCard
 from ex1.ArtifactCard import ArtifactCard
 from .CardFactory import CardFactory
+from ex0.Card import CardError
 import random
 
 
@@ -50,7 +51,7 @@ class FantasyCardFactory(CardFactory):
                                 *self._creatures[str(name_or_power)])
 
         elif name_or_power not in self._creatures.keys():
-            raise ValueError("Error: Creature {name_or_power] doesn't exist!")
+            raise CardError(f"Error: Creature {name_or_power} doesn't exist!")
 
         return CreatureCard(str(name_or_power),
                             *self._creatures[str(name_or_power)])
@@ -63,7 +64,7 @@ class FantasyCardFactory(CardFactory):
                              *self._spells[str(name_or_power)])
 
         if name_or_power not in self._spells.keys():
-            raise ValueError("Error: Spell {name_or_power] doesn't exist!")
+            raise CardError(f"Error: Spell {name_or_power} doesn't exist!")
 
         return SpellCard(str(name_or_power),
                          *self._spells[str(name_or_power)])
@@ -76,7 +77,7 @@ class FantasyCardFactory(CardFactory):
                                 *self._artifact[str(name_or_power)])
 
         if name_or_power not in self._artifact.keys():
-            raise ValueError("Error: Artifact {name_or_power] doesn't exist!")
+            raise CardError(f"Error: Artifact {name_or_power} doesn't exist!")
 
         return ArtifactCard(str(name_or_power),
                             *self._artifact[str(name_or_power)])

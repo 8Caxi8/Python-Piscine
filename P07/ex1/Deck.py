@@ -14,7 +14,7 @@ class Deck:
 
     def remove_card(self, card_name: str) -> bool:
         for card in self.cards:
-            if card.name == "card_name":
+            if card.name == card_name:
                 self.cards.remove(card)
                 return True
 
@@ -29,6 +29,9 @@ class Deck:
     def get_deck_stats(self) -> dict:
         deck_stats: dict[str, int | float] = {}
         total_cost: int = 0
+
+        if len(self.cards) == 0:
+            return {}
 
         deck_stats.update({"total_cards": len(self.cards)})
         for card in self.cards:

@@ -1,6 +1,10 @@
 from abc import ABC, abstractmethod
 
 
+class CardError(Exception):
+    pass
+
+
 class Card(ABC):
     def __init__(self, name: str, cost: int, rarity: str) -> None:
         self.name = name

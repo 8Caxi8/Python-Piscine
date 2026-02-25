@@ -1,4 +1,5 @@
 from ex0.Card import Card
+from ex0.Card import CardError
 from ex2.Combatable import Combatable
 from .Rankable import Rankable
 
@@ -10,6 +11,7 @@ class TournamentCard (Card, Combatable, Rankable):
         super().__init__(name, cost, rarity)
         self._attack = attack
         self._armor = armor
+        self._base_health = health
         self._health = health
         self._combat_type = combat_type
         self.wins = 0
@@ -17,6 +19,12 @@ class TournamentCard (Card, Combatable, Rankable):
         self.id = id
 
     def play(self, game_state: dict) -> dict:
+        if game_state["player"]["mana"] >= self.cost:
+            game_state["player"]["mana"] -= self.cost
+            game_state["player"]["cards"].append(self)
+        else:
+            raise CardError("Error: Not enough mana!")
+
         return {
             "card_played": self.name,
             "mana_used": self.cost,
@@ -24,19 +32,30 @@ class TournamentCard (Card, Combatable, Rankable):
         }
 
     def attack(self, target: Card) -> dict:
+        if isinstance(target, TournamentCard):
+            still_alive = target.defend(self._attack)["still_alive"]
+        else:
+            still_alive = False
+
         return {
             "attacker": self.name,
             "target": target.name,
             "damage": self._attack,
-            "combat_type": self._combat_type
-        }
+            "combat_type": self._combat_type,
+            "still_alive": still_alive
+            }
 
     def defend(self, incoming_damage: int) -> dict:
+        result = incoming_damage - self._armor
+
+        if result > 0:
+            self._health -= result
+
         return {
             "defender": self.name,
             "damage_taken": incoming_damage,
             "damage_blocked": self._armor,
-            "still_alive": self._health > incoming_damage - self._armor
+            "still_alive": self._health > 0
         }
 
     def get_combat_stats(self) -> dict:
@@ -48,8 +67,8 @@ class TournamentCard (Card, Combatable, Rankable):
         }
 
     def calculate_rating(self) -> int:
-        base_rank = (int(self._attack * 0.4 + self._armor *
-                     0.3 + self._health * 0.3))
+        base_rank = (int(self._attack * 50 + self._armor *
+                     140 + self._base_health * 143.5))
 
         return (base_rank + 16 * (self.wins - self.losses))
 

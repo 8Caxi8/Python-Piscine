@@ -1,19 +1,35 @@
 from .CreatureCard import CreatureCard
+from .Card import CardError
+from typing import Any
 
 
 def main() -> None:
+    game_state: dict[str, Any] = {
+        "player": {
+            "mana": 10,
+            "cards": [],
+        },
+        "enemy": {
+            "mana": 10,
+            "cards": [],
+        }
+    }
+
     print("\n=== DataDeck Card Foundation ===\n")
     print("Testing Abstract Base Class Design:\n")
 
     fire_dragon = CreatureCard("Fire Dragon", 5, "Legendary", 7, 5)
 
-    print("CreatureCard info:")
+    print("CreatureCard Info:")
     print(fire_dragon.get_card_info())
     print()
 
     print("Playing Fire Dragon with 6 mana available:")
     print(f"playable: {fire_dragon.is_playable(10)}")
-    print(f"Play result: {fire_dragon.play({})}")
+    try:
+        print(f"Play result: {fire_dragon.play(game_state)}")
+    except (CardError, KeyError) as e:
+        print(e)
     print()
 
     goblin_warrior = CreatureCard("Goblin Warrior", 2, "Commun", 2, 3)
@@ -22,7 +38,7 @@ def main() -> None:
     print()
 
     print("Testing insufficient mana (3 available):")
-    print(f"playable: {fire_dragon.is_playable(3)}")
+    print(f"Playable: {fire_dragon.is_playable(3)}")
     print()
 
     print("Abstract pattern successfully demonstrated!")
