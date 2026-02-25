@@ -14,8 +14,10 @@ These are a series of projects designed to introduce the Python programming lang
 
 - **Module 04 (** *v 2.1* **):** Introcution to file handling and secure resource management using the `with` statement. Implementing error handling with exceptions such as `FileNotFoundError`, `PermissionError`, and `OSError`. Introduction to system-level communication through the `sys` module, working with `sys.stdin`, `sys.stdout`, and `sys.stderr` to properly separate input, standard output, and alert output channels.
 
-- **Module 05 (** *v 2.0* **):** Introcution to advanced object-oriented design using `ABC`and `@abstractmethod` to define abstract base classes and enforce implementation contracts. Applied **method overriding** and **subtype polymorphism** to build flexible processing systems. Implemented interface-driven design using `Protocol` for duck typing, combining inheritance and composition to create scalable, multi-stage data pipelines with structured error handling and polymorphic orchestration.
+- **Module 05 (** *v 2.0* **):** Introcution to advanced object-oriented design using `ABC`and `@abstractmethod` to define abstract base classes and enforce implementation contracts. Applied **method overriding** and **subtype polymorphism** to git rm -r $(find . -type d -name "__pycache__") 
+fatal: No pathspec was given. Which files should I remove?
+build flexible processing systems. Implemented interface-driven design using `Protocol` for duck typing, combining inheritance and composition to create scalable, multi-stage data pipelines with structured error handling and polymorphic orchestration.
 
 - **Module 06 (*v 1.1*):** Introduction to Python package architecture through the use of `__init__.py` files. Learned how to import objects from custom modules using `from ... import`, and understood the difference between **absolute imports** and **relative imports**. Avoiding **circular dependencies**, using strategies like **late imports**, **dependency injection**, **shared modules**.
 
-- **Module 07 (*v 2.0*):**
+- **Module 07 (*v 2.0*):** Applying the concept of abstract base classes and using multiple inheritance for implementing multiple interfaces. Focuses on combining independent behaviors into cohesive systems, enabling flexible architecture through interface composition and polymorphism.
