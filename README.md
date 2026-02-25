@@ -2,7 +2,7 @@
 
 These are a series of projects designed to introduce the Python programming language and its interface. They are designed to be thematic implementations of specific more complex themes. 
 
-## Module Breackkdown
+## Module Breakdown
 
  - **Module 00 (** *v 1.0* **):** Introduction to core Python concepts, including variables, functions, data input/output, control flow (`if`, `while`, `for`, `range`), basic recursion, helper functions, and type annotations.
 
@@ -21,3 +21,5 @@ build flexible processing systems. Implemented interface-driven design using `Pr
 - **Module 06 (*v 1.1*):** Introduction to Python package architecture through the use of `__init__.py` files. Learned how to import objects from custom modules using `from ... import`, and understood the difference between **absolute imports** and **relative imports**. Avoiding **circular dependencies**, using strategies like **late imports**, **dependency injection**, **shared modules**.
 
 - **Module 07 (*v 2.0*):** Applying the concept of abstract base classes and using multiple inheritance for implementing multiple interfaces. Focuses on combining independent behaviors into cohesive systems, enabling flexible architecture through interface composition and polymorphism.
+
+- **Module 08 (*v 2.0*):**
