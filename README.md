@@ -22,4 +22,6 @@ build flexible processing systems. Implemented interface-driven design using `Pr
 
 - **Module 07 (*v 2.0*):** Applying the concept of abstract base classes and using multiple inheritance for implementing multiple interfaces. Focuses on combining independent behaviors into cohesive systems, enabling flexible architecture through interface composition and polymorphism.
 
-- **Module 08 (*v 2.0*):**
+- **Module 08 (*v 2.0*):** Introduction to **data  engineering workflows and environment configuration** in Python, dependency managment using **pip** and **Poetry**, including the creation of `requirements.txt`and `pyproject.toml` files for reproducible environments. Introduction to data processing and visualization using **NumPy**,**Pandas**, and **Matplotlib**, as well as interaction with external services through **HTTP APIs** using `requests`library. Configuration management with **environment variables** and `.env`files using **python-dotenv**, demonstrating development vs production settings and configuration validation.
+
+- **Module 09 (*v 2.0*):**

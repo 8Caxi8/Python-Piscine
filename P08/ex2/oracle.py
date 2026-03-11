@@ -3,7 +3,7 @@ import sys
 from dotenv import load_dotenv
 
 
-def load_configuration() -> dict:
+def load_configuration() -> dict[str, str | None]:
     load_dotenv()
 
     config = {
@@ -45,12 +45,10 @@ def simulate_environment_behavior(config: dict) -> None:
     else:
         print("[WARNING]: Unknown MATRIX_MODE")
 
-    if config["API_KEY"] == "secret123":
-        print("API Acess: Authenticated")
-    elif config["API_KEY"] == "dansimoe123":
-        print("API Acess: Top-Level Access")
+    if config["API_KEY"]:
+        print("API Access: Authenticated")
     else:
-        print("API ACCESS: Key not valid!")
+        print("API Access: Key not valid!")
 
     print(f"Log Level: {config['LOG_LEVEL']}")
     print("Zion Network: Online")
@@ -71,7 +69,7 @@ def security_check() -> None:
 def main() -> None:
     print("\nORACLE STATUS: Reading the Matrix...")
 
-    config: dict = load_configuration()
+    config: dict[str, str | None] = load_configuration()
 
     if not validate_configuration(config):
         sys.exit(1)
