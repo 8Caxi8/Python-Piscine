@@ -36,7 +36,23 @@ def memorized_fibonacci(n: int) -> int:
 
 
 def spell_dispatcher() -> callable:
-    pass
+    @functools.singledispatch
+    def spell(value):
+        raise TypeError("Unsupported spell type")
+
+    @spell.register
+    def _(value: int):
+        return f"Spell deal {value} damage."
+    
+    @spell.register
+    def _(value: str):
+        return f"Enchantment applied: {value}"
+    
+    @spell.register
+    def _(value: list):
+        return [spell(v) for v in value]
+    
+    return spell
 
 
 def base_enchantment(power: int, element: str, target: str) \
@@ -49,11 +65,14 @@ def base_enchantment(power: int, element: str, target: str) \
 
 
 def main() -> None:
-    print("\nTesting spell reducer...")
-    spells = [i for i in range(1, 40)]
-    print(f"Sum: {spell_reducer(spells, 'add')}")
-    print(f"Product: {spell_reducer(spells, 'multiply')}")
-    print(f"Max: {spell_reducer(spells, 'max')}")
+    try:
+        print("\nTesting spell reducer...")
+        spells = [i for i in range(1, 40)]
+        print(f"Sum: {spell_reducer(spells, 'add')}")
+        print(f"Product: {spell_reducer(spells, 'multiply')}")
+        print(f"Max: {spell_reducer(spells, 'max')}")
+    except ValueError as e:
+        print(e)
 
     print("\nTesting partial enchanter...")
     enchant = partial_enchanter(base_enchantment)
@@ -65,7 +84,14 @@ def main() -> None:
     print(f"Fib(10): {memorized_fibonacci(10)}")
     print(f"Fib(15): {memorized_fibonacci(15)}")
 
-    print("\nTesting spell dispather...")
+    try:
+        print("\nTesting spell dispather...")
+        dispatch = spell_dispatcher()
+        print(f"Spell: {dispatch(10)}")
+        print(f"Enchant: {dispatch("Mana channeling")}")
+        print(f"Multicast: {dispatch([5, 3, "Cooldown reduction"])}")
+    except TypeError as e:
+        print(e)
 
 
 if __name__ == "__main__":

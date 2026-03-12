@@ -6,12 +6,15 @@ import json
 import sys
 
 
-class Rank(Enum):
+class Rank(str, Enum):
     CADET = "cadet"
     OFFICER = "officer"
     LIEUTENANT = "lieutenant"
     CAPTAIN = "captain"
     COMMANDER = "commander"
+
+    def __str__(self):
+        return self.value
 
 
 class CrewMember(BaseModel):
@@ -72,7 +75,7 @@ def display_spacemission(mission: SpaceMission) -> None:
     print(f"Crew size: {len(mission.crew)}")
     print("Crew members:")
     for crew_member in mission.crew:
-        print(f"- {crew_member.name} ({crew_member.rank.value}) "
+        print(f"- {crew_member.name} ({crew_member.rank}) "
               f"- {crew_member.specialization}")
     print("=" * 40)
 
