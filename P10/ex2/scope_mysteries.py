@@ -4,7 +4,7 @@ from typing import Any
 def mage_counter() -> callable:
     i: int = 0
 
-    def counter():
+    def counter() -> int:
         nonlocal i
         i += 1
         return i
@@ -13,11 +13,11 @@ def mage_counter() -> callable:
 
 
 def spell_accumulator(initial_power: int) -> callable:
-    power: int = 0
+    power = initial_power
 
-    def accumulator():
+    def accumulator(amount: int) -> int:
         nonlocal power
-        power += initial_power
+        power += amount
         return power
 
     return accumulator
@@ -57,7 +57,7 @@ def main() -> None:
     print("\nTesting spell accumulator...")
     print(f"Starting power: {starting_power}")
     for i in range(1, 4):
-        print(f"  -Adding {starting_power}: {accumulator()}")
+        print(f"  -Adding {starting_power}: {accumulator(3)}")
 
     print("\nTesting enchantment factory...")
     flaming = enchantment_factory("Flaming")

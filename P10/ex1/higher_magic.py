@@ -18,29 +18,29 @@ def has_mana(mana: int) -> bool:
 
 
 def spell_combiner(spell1: callable, spell2: callable) -> callable:
-    def combined():
-        return (spell1(), spell2())
+    def combined(*args, **kwargs):
+        return (spell1(*args, **kwargs), spell2(*args, **kwargs))
     return combined
 
 
 def power_amplifier(base_spell: callable, multiplier: int) -> callable:
-    def amplified():
-        return multiplier * base_spell()
+    def amplified(*args, **kwargs):
+        return multiplier * base_spell(*args, **kwargs)
     return amplified
 
 
 def conditional_caster(condition: callable, spell: callable) -> callable:
-    def cast():
-        if condition():
-            return spell()
+    def cast(*args, **kwargs):
+        if condition(*args, **kwargs):
+            return spell(*args, **kwargs)
 
         return "Spell fizzled"
     return cast
 
 
 def spell_sequence(spells: list[callable]) -> callable:
-    def sequence():
-        return [spell() for spell in spells]
+    def sequence(*args, **kwargs):
+        return [spell(*args, **kwargs) for spell in spells]
     return sequence
 
 

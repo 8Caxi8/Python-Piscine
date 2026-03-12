@@ -29,10 +29,10 @@ def partial_enchanter(base_enchantment: callable) -> dict[str, callable]:
 
 
 @functools.lru_cache
-def memorized_fibonacci(n: int) -> int:
+def memoized_fibonacci(n: int) -> int:
     if n < 2:
         return n
-    return memorized_fibonacci(n - 1) + memorized_fibonacci(n - 2)
+    return memoized_fibonacci(n - 1) + memoized_fibonacci(n - 2)
 
 
 def spell_dispatcher() -> callable:
@@ -43,15 +43,15 @@ def spell_dispatcher() -> callable:
     @spell.register
     def _(value: int):
         return f"Spell deal {value} damage."
-    
+
     @spell.register
     def _(value: str):
         return f"Enchantment applied: {value}"
-    
+
     @spell.register
     def _(value: list):
         return [spell(v) for v in value]
-    
+
     return spell
 
 
@@ -80,16 +80,16 @@ def main() -> None:
     print(f"  - Ice: {enchant['ice_enchant']('shield')}")
     print(f"  - Lightning: {enchant['lightning_enchant']('helmet')}")
 
-    print("\nTesting memorized fibonacci...")
-    print(f"Fib(10): {memorized_fibonacci(10)}")
-    print(f"Fib(15): {memorized_fibonacci(15)}")
+    print("\nTesting memoized fibonacci...")
+    print(f"Fib(10): {memoized_fibonacci(10)}")
+    print(f"Fib(15): {memoized_fibonacci(15)}")
 
     try:
         print("\nTesting spell dispather...")
         dispatch = spell_dispatcher()
         print(f"Spell: {dispatch(10)}")
-        print(f"Enchant: {dispatch("Mana channeling")}")
-        print(f"Multicast: {dispatch([5, 3, "Cooldown reduction"])}")
+        print(f"Enchant: {dispatch('Mana channeling')}")
+        print(f"Multicast: {dispatch([5, 3, 'Cooldown reduction'])}")
     except TypeError as e:
         print(e)
 
