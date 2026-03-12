@@ -49,7 +49,6 @@ def get_nasaapi_data(longitude: float, latitude: float,
                       columns=["date", "solar_radiation"])
 
     df["date"] = pd.to_datetime(df["date"], format="%Y%m%d")
-    df["solar_radiation"] = pd.to_numeric(df["solar_radiation"])
 
     return df
 
@@ -210,8 +209,7 @@ def main() -> None:
         data = get_nasaapi_data(longitude, latitude, 20250101, 20260101)
         data_type = "solar_radiation"
 
-    except (rq.exceptions.HTTPError, rq.exceptions.ConnectionError,
-            rq.exceptions.Timeout) as e:
+    except (rq.exceptions.RequestException, KeyError, ValueError) as e:
         print(f"Requests Error: {e}")
         print("Generating backup data...\n")
         data = generate_data()

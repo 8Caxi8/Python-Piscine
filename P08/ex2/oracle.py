@@ -17,8 +17,8 @@ def load_configuration() -> dict[str, str | None]:
     return config
 
 
-def validate_configuration(config: dict) -> bool:
-    missing = [key for key, value in config.items() if not value]
+def validate_configuration(config: dict[str, str | None]) -> bool:
+    missing = [key for key, value in config.items() if value is None]
 
     if missing:
         print("[WARNING]: Missing configuration variables:")
@@ -27,13 +27,13 @@ def validate_configuration(config: dict) -> bool:
             print("\nPlease configure your .env "
                   "file or set environment variables.")
 
-            return False
+        return False
 
     return True
 
 
 def simulate_environment_behavior(config: dict) -> None:
-    mode = config["MATRIX_MODE"]
+    mode = config.get("MATRIX_MODE")
 
     print("\nConfiguration loaded:")
     print(f"Mode: {mode}")
@@ -57,12 +57,14 @@ def simulate_environment_behavior(config: dict) -> None:
 def security_check() -> None:
     print("\nEnvironment security check:")
 
-    print("[OK] No hardcoded secrets detected")
+    if os.path.exists(".gitignore"):
+        print("[OK] No hardcoded secrets detected")
+    else:
+        print("[WARNING]: secrets are exposed!")
     if os.path.exists(".env"):
         print("[OK] .env file properly configured")
     else:
         print("[WARNING]: No .env file detected")
-
     print("[OK] Production overrides available")
 
 
