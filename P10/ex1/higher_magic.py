@@ -1,3 +1,6 @@
+from typing import Callable, Any
+
+
 def attacks() -> str:
     return "Fireball hits Dragon"
 
@@ -17,19 +20,22 @@ def has_mana(mana: int) -> bool:
     return False
 
 
-def spell_combiner(spell1: callable, spell2: callable) -> callable:
+def spell_combiner(spell1: Callable[[], str], spell2: Callable[[], str]) \
+                                                        -> Callable[..., Any]:
     def combined(*args, **kwargs):
-        return (spell1(*args, **kwargs), spell2(*args, **kwargs))
+        return spell1(*args, **kwargs), spell2(*args, **kwargs)
     return combined
 
 
-def power_amplifier(base_spell: callable, multiplier: int) -> callable:
+def power_amplifier(base_spell: Callable[[int], int], multiplier: int) \
+                                                    -> Callable[..., Any]:
     def amplified(*args, **kwargs):
         return multiplier * base_spell(*args, **kwargs)
     return amplified
 
 
-def conditional_caster(condition: callable, spell: callable) -> callable:
+def conditional_caster(condition: Callable[[int], bool],
+                       spell: Callable[[int], int]) -> Callable[..., Any]:
     def cast(*args, **kwargs):
         if condition(*args, **kwargs):
             return spell(*args, **kwargs)
@@ -38,7 +44,7 @@ def conditional_caster(condition: callable, spell: callable) -> callable:
     return cast
 
 
-def spell_sequence(spells: list[callable]) -> callable:
+def spell_sequence(spells: list[Callable[..., Any]]) -> Callable[..., Any]:
     def sequence(*args, **kwargs):
         return [spell(*args, **kwargs) for spell in spells]
     return sequence

@@ -1,5 +1,6 @@
 import functools
 import operator
+from typing import Callable, Any
 
 
 def spell_reducer(spells: list[int], operation: str) -> int:
@@ -16,7 +17,8 @@ def spell_reducer(spells: list[int], operation: str) -> int:
             raise ValueError("[Error]: Invalid Operation")
 
 
-def partial_enchanter(base_enchantment: callable) -> dict[str, callable]:
+def partial_enchanter(base_enchantment: Callable[..., Any]) \
+                                            -> dict[str, Callable[..., Any]]:
     fire = functools.partial(base_enchantment, 50, "fire")
     ice = functools.partial(base_enchantment, 50, "ice")
     lightning = functools.partial(base_enchantment, 50, "lightning")
@@ -35,21 +37,21 @@ def memoized_fibonacci(n: int) -> int:
     return memoized_fibonacci(n - 1) + memoized_fibonacci(n - 2)
 
 
-def spell_dispatcher() -> callable:
+def spell_dispatcher() -> Callable[..., Any]:
     @functools.singledispatch
     def spell(value):
         raise TypeError("Unsupported spell type")
 
     @spell.register
-    def _(value: int):
+    def _(value: int) -> str:
         return f"Spell deal {value} damage."
 
     @spell.register
-    def _(value: str):
+    def _(value: str) -> str:
         return f"Enchantment applied: {value}"
 
     @spell.register
-    def _(value: list):
+    def _(value: list) -> list[str]:
         return [spell(v) for v in value]
 
     return spell

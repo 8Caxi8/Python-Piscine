@@ -1,28 +1,28 @@
 import time
 import functools
 import random
+from typing import Callable, Any
 
 
-def spell_timer(func: callable) -> callable:
+def spell_timer(func: Callable[..., Any]) -> Callable[..., Any]:
     @functools.wraps(func)
     def wrapper(*args, **kwargs):
         print(f"Casting {func.__name__}...")
         start = time.time()
-        return func(*args, **kwargs)
+        result = func(*args, **kwargs)
         end = time.time()
         print(f"Spell completed in {end - start:.3f} seconds")
+        return result
 
     return wrapper
 
 
-def power_validator(min_power: int) -> callable:
-    def verify_power(func):
+def power_validator(min_power: int) \
+                -> Callable[[Callable[..., Any]], Callable[..., Any]]:
+    def verify_power(func: Callable[..., Any]) -> Callable[..., Any]:
         @functools.wraps(func)
         def wrapper(*args, **kwargs):
-            if not isinstance(args[0], (int, float)):
-                power = args[1]
-            else:
-                power = args[0]
+            power = args[-1]
             if (power >= min_power):
                 return func(*args, **kwargs)
             else:
@@ -32,8 +32,9 @@ def power_validator(min_power: int) -> callable:
     return verify_power
 
 
-def retry_spell(max_attempts: int) -> callable:
-    def spell(func):
+def retry_spell(max_attempts: int) \
+                    -> Callable[[Callable[..., Any]], Callable[..., Any]]:
+    def spell(func: Callable[..., Any]) -> Callable[..., Any]:
         @functools.wraps(func)
         def wrapper(*args, **kwargs):
             for attempt in range(1, max_attempts + 1):
@@ -68,21 +69,21 @@ class MageGuild:
 
 @spell_timer
 def fireball() -> None:
-    time.sleep(0.5)
+    time.sleep(0.101)
 
 
 @power_validator(min_power=10)
-def sleep(power, target, **kwargs) -> str:
-    return f"Sleeping {target}"
+def sleep(power: int) -> str:
+    return "Creating a sleeping spell"
 
 
 @power_validator(min_power=20)
-def ice_storm(power, target, **kwargs) -> str:
-    return f"Creating an ice storm in {target}"
+def ice_storm(power: int) -> str:
+    return "Creating an ice storm"
 
 
 @retry_spell(max_attempts=5)
-def trying_power() -> None:
+def trying_power() -> str:
     if (random.random() < .8):
         raise ValueError
     else:
@@ -96,8 +97,8 @@ def main() -> None:
     print("Result: Fireball cast!")
 
     print("\nTesting power validator...")
-    print(sleep(5, "King Dwarf"))
-    print(ice_storm(25, "Allies"))
+    print(sleep(5))
+    print(ice_storm(25))
 
     print("\nTesting retry spell...")
     print(trying_power())
@@ -106,8 +107,8 @@ def main() -> None:
     guild = MageGuild()
     print(guild.validate_mage_name("Dan Simoe   "))
     print(guild.validate_mage_name("Dan  #"))
-    print(guild.cast_spell(15, "Lightning"))
-    print(guild.cast_spell(0, "Ice ray"))
+    print(guild.cast_spell("Lightning", 15))
+    print(guild.cast_spell("Ice ray", 0))
 
 
 if __name__ == "__main__":

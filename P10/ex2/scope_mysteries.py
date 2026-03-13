@@ -1,7 +1,7 @@
-from typing import Any
+from typing import Any, Callable
 
 
-def mage_counter() -> callable:
+def mage_counter() -> Callable[[], int]:
     i: int = 0
 
     def counter() -> int:
@@ -12,7 +12,7 @@ def mage_counter() -> callable:
     return counter
 
 
-def spell_accumulator(initial_power: int) -> callable:
+def spell_accumulator(initial_power: int) -> Callable[[int], int]:
     power = initial_power
 
     def accumulator(amount: int) -> int:
@@ -23,20 +23,20 @@ def spell_accumulator(initial_power: int) -> callable:
     return accumulator
 
 
-def enchantment_factory(enchantment_type: str) -> callable:
-    def enchanting(item: str):
+def enchantment_factory(enchantment_type: str) -> Callable[[str], str]:
+    def enchanting(item: str) -> str:
         return " ".join([enchantment_type, item])
 
     return enchanting
 
 
-def memory_vault() -> dict[str, callable]:
+def memory_vault() -> dict[str, Callable[..., Any]]:
     memory: dict[Any, Any] = {}
 
-    def store(key: Any, value: Any):
+    def store(key: Any, value: Any) -> None:
         memory[key] = value
 
-    def recall(key: Any):
+    def recall(key: Any) -> None:
         return memory.get(key, "Memory not found")
 
     return {
@@ -57,7 +57,7 @@ def main() -> None:
     print("\nTesting spell accumulator...")
     print(f"Starting power: {starting_power}")
     for i in range(1, 4):
-        print(f"  -Adding {starting_power}: {accumulator(3)}")
+        print(f"  -Adding 3: {accumulator(3)}")
 
     print("\nTesting enchantment factory...")
     flaming = enchantment_factory("Flaming")
